@@ -5,6 +5,8 @@ from .models import Question
 from chataki.chatgpt import digital_person_chat
 from chataki.chatgpt import digital_person
 import json
+import openai
+import time
 
 # Create your views here.
 
@@ -33,7 +35,8 @@ def process(request):
         # print(f"{input_text}")
 
         answer = digital_person_chat(digital_person[0], history, input_string)
-        # print(answer)
+        # answer1 = chatgpt_inquery(input_string)
+        print(answer)
         # history += answer + '  '
 
         processed_string = answer

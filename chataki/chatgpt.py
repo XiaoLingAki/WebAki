@@ -55,7 +55,7 @@ def chatgpt(text):
             raise RuntimeError
 
         # print(completion["choices"][0]["message"]["content"])
-        # print(completion)
+        print(completion)
         end = time.time()
         print(end - start)
         return completion
