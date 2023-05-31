@@ -79,7 +79,7 @@
       var url = model === 'chataki' ? 'http://127.0.0.1:8000/chataki/process/' : 'http://127.0.0.1:8000/chataki/processgpt/';
 
       // 在这里编写处理输入文本的代码
-      fetch('http://127.0.0.1:8000/chataki/process/', {
+      fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
