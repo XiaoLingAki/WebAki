@@ -35,7 +35,7 @@ def process(request):
         # history += input_text + '  '
         # print(f"{input_text}")
 
-        answer = chatgpt(digital_person[0], history, input_string)
+        answer = chatgpt(input_string)
         # answer1 = chatgpt_inquery(input_string)
         print(answer)
         # history += answer + '  '
