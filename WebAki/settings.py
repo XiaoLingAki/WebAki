@@ -25,15 +25,18 @@ SECRET_KEY = 'django-insecure-%1#)f(!4pgb$%%_gc$b)qrxghnvibioq*tp7i4l%8qfm3#wds&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['20874va635.goho.co','127.0.0.1']
+ALLOWED_HOSTS = ['20874va635.goho.co','127.0.0.1','chataki.xyz']
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://chataki.xyz',
+    'http://chataki.xyz',
     'https://20874va635.goho.co',
     'http://127.0.0.1',
     # 添加其他信任的域名
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    'http://chataki.xyz',
     'http://127.0.0.1:8000',  # 允许的源地址
 ]
 
