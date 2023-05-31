@@ -3,11 +3,11 @@ import openai
 import time
 
 
-# proxy = {
-# 'http': 'http://localhost:7890',
-# 'https': 'http://localhost:7890'
-# }
-# openai.proxy = proxy
+proxy = {
+'http': 'http://localhost:7890',
+'https': 'http://localhost:7890'
+}
+openai.proxy = proxy
 
 history = '聊天记录：'
 
