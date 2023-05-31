@@ -35,6 +35,12 @@ def process(request):
         # history += input_text + '  '
         # print(f"{input_text}")
 
+        completion = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                # model="text-davinci-003",
+                messages=[{"role": "user", "content": input_string}]
+            )
+        
         answer = chatgpt(input_string)
         # answer1 = chatgpt_inquery(input_string)
         print(answer)

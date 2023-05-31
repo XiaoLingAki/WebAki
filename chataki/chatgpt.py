@@ -51,15 +51,16 @@ def chatgpt(text):
                 # model="text-davinci-003",
                 messages=[{"role": "user", "content": text}]
             )
+            print(completion)
         except (openai.APIError, openai.error.APIConnectionError):
             raise RuntimeError
 
         # print(completion["choices"][0]["message"]["content"])
-        print(completion)
+        # print(completion)
         end = time.time()
         print(end - start)
         return completion
-
+    
     try:
         completion = chatgpt_inquery(text)
         # print(completion["choices"][0]["message"]["content"])
