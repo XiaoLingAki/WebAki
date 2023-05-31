@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import Question
 from chataki.chatgpt import digital_person_chat
+from chataki.chatgpt import chatgpt
 from chataki.chatgpt import digital_person
 import json
 import openai
@@ -34,7 +35,7 @@ def process(request):
         # history += input_text + '  '
         # print(f"{input_text}")
 
-        answer = digital_person_chat(digital_person[0], history, input_string)
+        answer = chatgpt(digital_person[0], history, input_string)
         # answer1 = chatgpt_inquery(input_string)
         print(answer)
         # history += answer + '  '
