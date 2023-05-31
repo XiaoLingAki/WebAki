@@ -44,6 +44,7 @@ CORS_ALLOWED_ORIGINS = [
 
 INSTALLED_APPS = [
     'chataki.apps.ChatakiConfig',
+    'index.apps.IndexConfig',
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',

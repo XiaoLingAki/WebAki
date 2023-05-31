@@ -18,8 +18,10 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.staticfiles.views import serve
+from index.views import home
 
 urlpatterns = [
+    path('', include("index.urls")),
     path("chataki/", include("chataki.urls")),
     path('admin/', admin.site.urls),
     
