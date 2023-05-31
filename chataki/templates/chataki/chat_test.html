@@ -57,6 +57,11 @@
   <h1>ChatAki alpha 0.1</h1>
   聊天粉毛测试版，基于chatglm-6B，用几十万条galgame文本+LCCC语料库训练
   <div class="container">
+    <select id="modelSelect">
+      <option value="chataki">粉毛</option>
+      <option value="gpt">原版GPT</option>
+    </select>
+    <br>
     <textarea class="input-text" id="inputText" placeholder="在这里输入文本"></textarea>
     <button class="btn" onclick="processText()">处理文本</button>
     <textarea class="output-text" id="outputText" placeholder="处理后的文本将在这里显示" readonly></textarea>
@@ -67,7 +72,11 @@
 
     function processText() {
       // 获取 CSRF 令牌的值
+      var modelSelect = document.getElementById('modelSelect');
+      var model = modelSelect.value;
       var inputString = document.getElementById('inputText').value;
+
+      var url = model === 'chataki' ? 'http://127.0.0.1:8000/chataki/process/' : 'http://127.0.0.1:8000/chataki/processgpt/';
 
       // 在这里编写处理输入文本的代码
       fetch('http://127.0.0.1:8000/chataki/process/', {
