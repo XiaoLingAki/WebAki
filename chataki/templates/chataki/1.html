@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .active {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="toolbar">
+      <div class="toolbar-item" onclick="selectOption(this)">原版GPT</div>
+      <div class="toolbar-item" onclick="selectOption(this)">小琪</div>
+      <div class="toolbar-item" onclick="selectOption(this)">小韫</div>
+    </div>
+  </div>
+
+  <script>
+    function selectOption(option) {
+      // 移除所有选项的高亮状态
+      var toolbarItems = document.querySelectorAll('.toolbar-item');
+      toolbarItems.forEach(function(item) {
+        item.classList.remove('active');
+      });
+
+      // 添加当前选项的高亮状态
+      option.classList.add('active');
+
+      // 显示提示信息
+      var optionName = option.textContent;
+      console.log('已切换为' + optionName);
+    }
+  </script>
+</body>
+</html>

@@ -7,3 +7,7 @@ class Question(models.Model):
     
     def __str__(self):
         return self.question_text
+    
+class Personality(models.Model):
+    personality_type = models.CharField(max_length=200)
+    personality_id = models.IntegerField(default=0)

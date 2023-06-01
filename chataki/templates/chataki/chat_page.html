@@ -1,42 +1,103 @@
 <!DOCTYPE html>
 <html>
-  <form>
-    {% csrf_token %}
-  </form>
 <head>
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+  <title>ChatAki Alpha 0.3</title>
   
-  <title>文本处理页面</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
+    /* 新增的导航栏样式 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #f1f1f1;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    h1 {
-      text-align: center;
+    .navbar-item {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .navbar-item:hover {
+      background-color: #ddd;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-repeat: no-repeat;
+      background-size: cover;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
 
     .container {
-      max-width: 500px;
-      margin: 0 auto;
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      flex: 0 0 200px;
+      background-color: #e0eaf5;
+      box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .toolbar-item {
+      padding: 10px;
+      font-size: 16px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .toolbar-item:hover {
+      background-color: #d3e3f1;
+    }
+
+    .toolbar-item.active {
+      background-color: #d3e3b5;
+    }
+
+    .main {
+      flex: 1;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
     .input-text {
       width: 100%;
-      height: 100px;
+      height: 200px;
       padding: 10px;
       font-size: 16px;
-      margin-bottom: 10px;
-    }
-
-    .output-text {
-      width: 100%;
-      height: 100px;
-      padding: 10px;
-      font-size: 16px;
+      margin-bottom: 20px;
       border: 1px solid #ccc;
-      background-color: #f5f5f5;
+      border-radius: 4px;
+      resize: none;
     }
 
     .btn {
@@ -49,28 +110,87 @@
       color: #fff;
       text-decoration: none;
       border: none;
+      border-radius: 4px;
       cursor: pointer;
+    }
+
+    .output-text {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f5f5f5;
+      resize: none;
     }
   </style>
 </head>
+
 <body>
-  <h1>ChatAki alpha 0.2</h1>
-  聊天粉毛测试版，基于chatglm-6B，用几十万条galgame文本+LCCC语料库训练
+  <div class="navbar">
+    <div class="navbar-item">ChatAki</div>
+    <!-- 添加更多导航栏项，根据需要自行添加 -->
+    
+  </div>
+
   <div class="container">
-    <textarea class="input-text" id="inputText" placeholder="在这里输入文本"></textarea>
-    <button class="btn" onclick="processText()">处理文本</button>
-    <textarea class="output-text" id="outputText" placeholder="处理后的文本将在这里显示" readonly></textarea>
+    <div class="sidebar">
+      <div class="toolbar">
+        <div class="toolbar-item" id="option1" onclick="selectOption('option1')">原版GPT</div>
+        <div class="toolbar-item" id="option2" onclick="selectOption('option2')">小琪</div>
+        <div class="toolbar-item" id="option3" onclick="selectOption('option3')">粉毛</div>
+      </div>
+    </div>
+
+    <div class="main">
+      <h1>聊天粉毛测试版 v0.3</h1>
+      <textarea class="input-text" id="inputText" placeholder="在这里输入文本"></textarea>
+      <button class="btn" onclick="processText()">处理文本</button>
+      <textarea class="output-text" id="outputText" placeholder="处理后的文本将在这里显示" readonly></textarea>
+    </div>
   </div>
 
   <script>
     var csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+   
+    var process_url = 'http://127.0.0.1:8000/chataki/Aki/'
 
-    function processText() {
+    function selectOption(optionId) {
+        // 移除所有选项的高亮状态
+        var toolbarItems = document.querySelectorAll('.toolbar-item');
+        toolbarItems.forEach(function(item) {
+          item.classList.remove('active');
+        });
+
+        // 添加当前选项的高亮状态
+        var option = document.getElementById(optionId);
+        option.classList.add('active');
+        
+        // 显示提示信息
+        var optionName = option.textContent;
+        console.log('已切换为' + optionName);
+
+        // 更新 process_url
+        if (optionName=='原版GPT') {
+          process_url = 'http://127.0.0.1:8000/chataki/GPT/';
+          console.log('已切换为', process_url);
+        } else if (optionName=='小琪'){
+          process_url = 'http://127.0.0.1:8000/chataki/Aki/';
+          console.log('已切换为', process_url);
+        } else if (optionName=='粉毛'){
+          process_url = 'http://127.0.0.1:8000/chataki/Serika/';
+          console.log('已切换为', process_url);
+        }
+        
+    }
+
+    function processText(url = process_url) {
       // 获取 CSRF 令牌的值
       var inputString = document.getElementById('inputText').value;
 
       // 在这里编写处理输入文本的代码
-      fetch('http://chataki.xyz/chataki/processgpt/', {
+      fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,6 +210,44 @@
         console.error('Error:', error);
       });
     }
+
+    function getImage() {
+      // 获取JSON响应数据
+      var url = 'http://127.0.0.1:8000/chataki/image/'; // 替换为你要获取JSON响应的URL
+
+      fetch(url)
+        .then(function(response) {
+          if (response.ok) {
+            return response.json(); // 将响应解析为JSON格式
+          }
+          throw new Error('Network response was not OK');
+        })
+        .then(function(jsonResponse) {
+          // 在这里处理JSON响应数据
+          // 获取图片数据
+          var imageData = jsonResponse.image;
+          console.log(imageData)
+          // 创建CSS样式字符串
+          var cssStyle = 'body { background-image: url("data:image/jpeg;base64,' + imageData + '"); background-color: rgba(255, 255, 255, 0.7); }';
+          // 将CSS样式应用到页面
+          var styleElement = document.createElement('style');
+          styleElement.innerHTML = cssStyle;
+          document.head.appendChild(styleElement);
+        })
+        .catch(function(error) {
+          // 处理错误情况
+          console.log('Error:', error.message);
+        });
+    }
   </script>
 </body>
 </html>
+
+<script>
+  window.onload = function() {
+    getImage();
+    var csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+  };
+
+</script>
+
