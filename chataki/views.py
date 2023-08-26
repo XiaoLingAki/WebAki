@@ -2,9 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import Question
-from chataki.chatgpt import digital_person_chat
-from chataki.chatgpt import chatgpt
-from chataki.chatgpt import digital_person
+
+from .api import *
 import json
 import openai
 import base64
@@ -35,7 +34,7 @@ def process_gpt(request):
         # history += input_text + '  '
         # print(f"{input_text}")
         
-        answer = chatgpt(input_string)
+        answer = response_create(input_string)
         # answer1 = chatgpt_inquery(input_string)
         print(answer)
         # history += answer + '  '
@@ -63,7 +62,7 @@ def process(request):
         # history += input_text + '  '
         # print(f"{input_text}")
         
-        answer = digital_person_chat(digital_person[0],history,input_string)
+        answer = response_create(input_string)
         # answer1 = chatgpt_inquery(input_string)
         print(answer)
         # history += answer + '  '
@@ -90,8 +89,8 @@ def process_one(request):
         # input_text = input_string
         # history += input_text + '  '
         # print(f"{input_text}")
-
-        answer = digital_person_chat(digital_person[1],history,input_string)
+        input_string = '           ' + input_string
+        answer = response_create(input_string)
         # answer1 = chatgpt_inquery(input_string)
         # print(answer)
         # history += answer + '  '

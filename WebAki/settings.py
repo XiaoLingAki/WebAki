@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-%1#)f(!4pgb$%%_gc$b)qrxghnvibioq*tp7i4l%8qfm3#wds&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['20874va635.goho.co','127.0.0.1','chataki.xyz']
+ALLOWED_HOSTS = ['20874va635.goho.co','127.0.0.1','chataki.xyz','123.207.0.178']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://chataki.xyz',
