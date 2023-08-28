@@ -147,7 +147,7 @@
       <h1>聊天粉毛测试版 v0.3</h1>
       <textarea class="input-text" id="inputText" placeholder="在这里输入文本"></textarea>
       <button class="btn" onclick="processText()">处理文本</button>
-      <textarea class="output-text" id="outputText" placeholder="处理后的文本将在这里显示" readonly></textarea>
+      <iframe class="output-iframe" id="outputIframe" src="" frameborder="0"></iframe>
     </div>
   </div>
 
@@ -155,6 +155,7 @@
     var csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
    
     var process_url = 'http://127.0.0.1:8000/chataki/Aki/'
+    var draw_url = 'http://127.0.0.1:8000/chataki/stablediffusion/'
 
     function selectOption(optionId) {
         // 移除所有选项的高亮状态
@@ -189,7 +190,49 @@
       // 获取 CSRF 令牌的值
       var inputString = document.getElementById('inputText').value;
 
-      // 在这里编写处理输入文本的代码
+      if (inputString.includes('#画图')) {
+      // Fetch the image data from the draw_url
+    fetch(draw_url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken, // 添加 CSRF 令牌
+      },
+      body: JSON.stringify({ 'input_string': inputString.substring(4) }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      var encodedImage = data.image; // Base64-encoded image string
+
+      // Create a processed HTML with the image
+      var processedHTML = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            img {
+              max-width: 100%;
+              height: auto;
+            }
+          </style>
+        </head>
+        <body>
+          <pre>好的，我帮你画了一张这样的画哦~</pre>
+          <br> <!-- 添加换行 -->
+          <img src="data:image/jpeg;base64,${encodedImage}" alt="Image">
+        </body>
+        </html>
+      `;
+
+      // Set the iframe's srcdoc attribute to display the processed HTML content
+      var outputIframe = document.getElementById('outputIframe');
+      outputIframe.srcdoc = processedHTML;
+    })
+    .catch(error => {
+      console.error('Error fetching image:', error);
+    });
+      } else {
+        // 在这里编写处理输入文本的代码
       fetch(url, {
         method: 'POST',
         headers: {
@@ -201,14 +244,31 @@
       .then(response => response.json())
       .then(data => {
         var processedString = data.processed_string;  // 处理后的字符串
+        var processedHTML = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        pre {
+          white-space: pre-wrap;
+        }
+      </style>
+    </head>
+    <body>
+      <pre>${processedString}</pre>
+    </body>
+    </html>
+  `;
+
         console.log('Processed String:', processedString);
         // 在这里执行对处理后的字符串的进一步操作
-        document.getElementById('outputText').value = processedString;
+        document.getElementById('outputIframe').srcdoc = processedHTML;
 
       })
       .catch(error => {
         console.error('Error:', error);
       });
+      }
     }
 
     function getImage() {

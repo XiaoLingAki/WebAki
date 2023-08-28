@@ -9,6 +9,12 @@ import openai
 import base64
 import time
 
+import json
+import requests
+import io
+import base64
+from PIL import Image, PngImagePlugin
+
 # Create your views here.
 
 def index(request):
@@ -120,3 +126,41 @@ def image_passing(request):
 
     # 将JSON对象转换为字符串
     return JsonResponse(response)
+
+def stable_diffusion(request):
+    
+    logger.debug("received")
+    url = "http://192.168.31.76:7861"
+    
+    logger.debug(request.body)
+    data = json.loads(request.body)
+    
+    prompt_prefix = 'masterpiece, best quality, illustration, extremely detailed 8K wallpaper'
+    # 负面提示词，sd 的一个参数
+    negative_prompt = 'NG_DeepNegative_V1_75T, badhandv4, EasyNegative, bad hands, missing fingers, cropped legs, worst quality, low quality, normal quality, jpeg artifacts, blurry,missing arms, long neck, Humpbacked,multiple breasts, mutated hands and fingers, long body, mutation, poorly drawn , bad anatomy,bad shadow,unnatural body, fused breasts, bad breasts, more than one person,wings on halo,small wings, 2girls, lowres, bad anatomy, text, error, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers,'
+    # 这也是 sd 的一个参数
+    sampler_index = 'DPM++ SDE Karras'
+
+
+    input_string = data.get('input_string')
+    logger.debug(input_string)
+    payload = {
+        "prompt": prompt_prefix + ', ' + input_string,
+        "negative_prompt": negative_prompt,
+        "cfg_scale": 7,
+        "width": 1024, 
+        "height": 768, 
+        "steps": 50
+    }
+    logger.debug(payload["prompt"])
+    response = requests.post(url=f'{url}/sdapi/v1/txt2img', json=payload)
+
+    r = response.json()
+    encoded_image = r['images'][0]
+    # logger.debug(encoded_image)
+    # 将JSON对象转换为字符串
+    
+    response1 = {
+        'image': encoded_image
+    }
+    return JsonResponse(response1)

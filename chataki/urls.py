@@ -15,6 +15,7 @@ urlpatterns = [
     path("Serika/",views.process_one,name="processone"),
     path("index/",views.index,name='index'),
     path("test/",views.chat_test,name='chat_test'),
-    path("image/",views.image_passing,name='image')
+    path("image/",views.image_passing,name='image'),
+    path("stablediffusion/",views.stable_diffusion,name='AIdrawing')
     
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
